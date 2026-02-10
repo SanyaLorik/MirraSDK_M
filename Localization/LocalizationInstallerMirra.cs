@@ -2,7 +2,7 @@ using Architecture_M;
 
 namespace MirraSDK_M
 {
-    public class LocalizationInstallerMirra<TLocalizationData> : LocalizationInstaller<LocalizationDataNC>
+    public class LocalizationInstallerMirra<TLocalizationData> : LocalizationInstaller<TLocalizationData>
         where TLocalizationData : LocalizationData
     {
         protected override RealLanguageDeterminantBase GetLanguageDeterminantLogic()
