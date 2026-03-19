@@ -18,7 +18,7 @@ namespace MirraSDK_M
 
         public override IReadOnlyList<PurchaseSlot> FindAllPurchases(IReadOnlyList<PurchaseSlot> purchaseSlots)
         {
-            List<PurchaseSlot> slots = new(purchaseSlots);
+            List<PurchaseSlot> slots = new(purchaseSlots.Count);
             foreach (var slot in purchaseSlots)
             {
                 ProductData productData = MirraSDK.Payments.GetProductData(slot.Id);
@@ -56,12 +56,15 @@ namespace MirraSDK_M
                 {
                     restoreData.RestoreProduct(productTag, onProductRestore: () =>
                     {
-                        PurchaseSlot purchaseSlot = availablePurchases.First(i => i.Id == productTag);
+                        PurchaseSlot purchaseSlot = availablePurchases.FirstOrDefault(i => i.Id == productTag);
+                        if (purchaseSlot == default)
+                            return;
+
                         purchaseSlot.Buy();
 
                         Debug.Log($"Товар '{productTag}' восстановлен");
-                    });
 
+                    });
                 }
             });
         }
