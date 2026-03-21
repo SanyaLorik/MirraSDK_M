@@ -4,22 +4,21 @@ using UnityEngine;
 
 namespace MirraSDK_M
 {
-    public class SaveLoadMirra<TGameSaveBase> : SaveLoaderBase<TGameSaveBase>
-        where TGameSaveBase : GameSaveBase, new()
+    public class SaveLoadMirra : SaveLoaderBase<GameSaveBase>
     {
         private const string MirraPrefsKey = "GameSave";
 
-        public override TGameSaveBase Load()
+        public override GameSaveBase Load()
         {
-            string defaultData = JsonUtility.ToJson(new TGameSaveBase());
+            string defaultData = JsonUtility.ToJson(new GameSaveBase());
             string stringValue = MirraSDK.Data.GetString(key: MirraPrefsKey, defaultValue: defaultData);
 
             Debug.Log($"{MirraPrefsKey} Load {stringValue}");
-            return JsonUtility.FromJson<TGameSaveBase>(stringValue);
-
+            return JsonUtility.FromJson<GameSaveBase>(stringValue);
+            GameSave a = (GameSave)(new GameSaveBase());
         }
 
-        public override void Save(TGameSaveBase gameSave)
+        public override void Save(GameSaveBase gameSave)
         {
             string data = JsonUtility.ToJson(gameSave, true);
             MirraSDK.Data.SetString(key: MirraPrefsKey, writeValue: data, important: true);
