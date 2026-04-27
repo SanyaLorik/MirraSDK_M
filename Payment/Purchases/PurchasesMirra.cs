@@ -16,9 +16,9 @@ namespace MirraSDK_M
             await UniTask.WaitWhile(() => MirraSDK.IsInitialized == false);
         }
 
-        public override IReadOnlyList<PurchaseSlot> FindAllPurchases(IReadOnlyList<PurchaseSlot> purchaseSlots)
+        public override IReadOnlyList<PurchaseSlotBase> FindAllPurchases(IReadOnlyList<PurchaseSlotBase> purchaseSlots)
         {
-            List<PurchaseSlot> slots = new(purchaseSlots.Count);
+            List<PurchaseSlotBase> slots = new(purchaseSlots.Count);
             foreach (var slot in purchaseSlots)
             {
                 ProductData productData = MirraSDK.Payments.GetProductData(slot.Id);
@@ -45,7 +45,7 @@ namespace MirraSDK_M
                 onError: onError);
         }
 
-        public override void Consume(IReadOnlyList<PurchaseSlot> availablePurchases)
+        public override void Consume(IReadOnlyList<PurchaseSlotBase> availablePurchases)
         {
             MirraSDK.Payments.RestorePurchases((restoreData) =>
             {
@@ -56,7 +56,7 @@ namespace MirraSDK_M
                 {
                     restoreData.RestoreProduct(productTag, onProductRestore: () =>
                     {
-                        PurchaseSlot purchaseSlot = availablePurchases.FirstOrDefault(i => i.Id == productTag);
+                        PurchaseSlotBase purchaseSlot = availablePurchases.FirstOrDefault(i => i.Id == productTag);
                         if (purchaseSlot == default)
                             return;
 
